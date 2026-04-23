@@ -9,10 +9,17 @@ import {
 } from "lucide-react";
 import type { Tabs } from "./useSidebar";
 
+type Path =
+  | "/"
+  | "/customers"
+  | "/orders"
+  | "/products"
+  | "/team"
+  | "/settings";
 type NavItemType = {
   name: Tabs;
   icon: React.ComponentType<LucideProps>;
-  path: string;
+  path: Path;
 };
 const useLayout = () => {
   const navItems: NavItemType[] = [

@@ -4,11 +4,40 @@ import { useSidebar } from "../hooks/useSidebar";
 
 import "./Sidebar-style.scss";
 import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 
 const Sidebar = () => {
   const { navItems } = useLayout();
-  const { isOpen, toggle, setSelectedTab } = useSidebar();
+  const { isOpen, toggle, setSelectedTab, close, selectedTab } = useSidebar();
   const SideBarIcon = isOpen ? ArrowLeftFromLine : ArrowRightFromLine;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1023px)");
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        close();
+      }
+    };
+
+    if (mediaQuery.matches) {
+      close();
+    }
+
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+    };
+  }, [close]);
+
+  const closeOnSmallScreen = () => {
+    const mediaQuery = window.matchMedia("(max-width: 1023px)");
+
+    if (mediaQuery.matches) {
+      close();
+    }
+  };
 
   return (
     <>
@@ -58,8 +87,11 @@ const Sidebar = () => {
                 key={item.name}
                 to={item.path}
                 title={item.name}
-                className={`flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer`}
-                onClick={() => setSelectedTab(item.name)}
+                className={`flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer ${selectedTab === item.name && "bg-gray-100"}`}
+                onClick={() => {
+                  setSelectedTab(item.name);
+                  closeOnSmallScreen();
+                }}
               >
                 <Icon className="size-5" />
                 {isOpen && (

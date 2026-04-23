@@ -12,12 +12,16 @@ import {
   type TooltipContentProps,
   type YAxisTickContentProps,
 } from "recharts";
+import { useState } from "react";
+import Button from "../../../../../common/Button";
 
 const SalesGraph = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["sales-chart"],
     queryFn: fetchSalesGraphData,
   });
+
+  const [range, setRange] = useState<"6M" | "1Y">("6M");
 
   const CustomYAxisTickValue = (props: YAxisTickContentProps) => {
     const value = Math.round(props.payload.value / 1000) + "k";
@@ -63,16 +67,39 @@ const SalesGraph = () => {
     );
   };
 
+  const displayedData = range === "6M" ? data?.slice(-6) : data;
+
   return (
-    <div className="flex flex-col rounded-lg border border-gray-300 p-4">
-      <span className="text-base font-medium text-gray-700 mb-4">
-        Sales: FY 2025-26
-      </span>
+    <div className="flex flex-col justify-between rounded-lg border border-gray-300 p-4">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-base font-medium text-gray-700">
+          Sales: FY 2025-26
+        </span>
+
+        {!isLoading && (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant={range === "6M" ? "primary" : "secondary"}
+              onClick={() => setRange("6M")}
+            >
+              6 Months
+            </Button>
+            <Button
+              size="sm"
+              variant={range === "1Y" ? "primary" : "secondary"}
+              onClick={() => setRange("1Y")}
+            >
+              1 Year
+            </Button>
+          </div>
+        )}
+      </div>
       {isLoading ? (
-        <></>
+        <div className="h-[300px] animate-pulse bg-gray-100 rounded-md" />
       ) : (
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
+          <BarChart data={displayedData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis tick={CustomYAxisTickValue} />

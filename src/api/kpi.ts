@@ -47,6 +47,6 @@ export const fetchKpis = (): Promise<Kpi[]> => {
           icon: Package,
         },
       ]);
-    }, 8000);
+    }, 800);
   });
 };

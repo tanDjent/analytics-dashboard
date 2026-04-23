@@ -24,6 +24,6 @@ export const fetchSalesGraphData = (): Promise<SalesData[]> => {
         { month: "Feb", revenue: 21780, orders: 1152 },
         { month: "Mar", revenue: 24500, orders: 1248 },
       ]);
-    }, 8000);
+    }, 800);
   });
 };
