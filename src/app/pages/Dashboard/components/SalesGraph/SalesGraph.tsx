@@ -70,7 +70,7 @@ const SalesGraph = () => {
   const displayedData = range === "6M" ? data?.slice(-6) : data;
 
   return (
-    <div className="flex flex-col justify-between rounded-lg border border-gray-300 p-4">
+    <div className="flex flex-col justify-between rounded-lg bg-white p-4">
       <div className="flex items-center justify-between mb-4">
         <span className="text-base font-medium text-gray-700">
           Sales: FY 2025-26

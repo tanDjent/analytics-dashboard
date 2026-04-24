@@ -30,7 +30,7 @@ const CountryTrafficBarChart = () => {
   };
 
   return (
-    <div className="rounded-lg border border-gray-300 p-4">
+    <div className="rounded-lg bg-white p-4">
       <div className="mb-4 text-base font-medium text-gray-700">
         Traffic by Country
       </div>

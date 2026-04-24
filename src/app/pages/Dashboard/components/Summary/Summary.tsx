@@ -10,8 +10,7 @@ const Summary = () => {
   });
 
   return (
-    <div className="flex flex-col rounded-lg border border-gray-300 p-4">
-      <span className="text-base font-medium text-gray-700 mb-4">Summary</span>
+    <div className="flex flex-col rounded-lg">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {isLoading
           ? Array.from({ length: 4 }).map((_, i) => <KpiCardSkeleton key={i} />)

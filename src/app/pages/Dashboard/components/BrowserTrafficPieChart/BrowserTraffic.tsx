@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import {
   PieChart,
   Pie,
-  Cell,
   ResponsiveContainer,
   Tooltip,
   type TooltipContentProps,
@@ -29,8 +28,12 @@ const BrowserTrafficPieChart = () => {
     );
   };
 
+  const coloredData = data?.map((item, index) => ({
+    ...item,
+    fill: colors[index],
+  }));
   return (
-    <div className="rounded-lg border border-gray-300 p-4">
+    <div className="rounded-lg bg-white p-4">
       <div className="mb-4 text-base font-medium text-gray-700">
         Traffic by Browser
       </div>
@@ -44,19 +47,15 @@ const BrowserTrafficPieChart = () => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={data}
+                  data={coloredData}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={70}
                   outerRadius={100}
                   paddingAngle={2}
-                >
-                  {data?.map((entry, index) => (
-                    <Cell key={entry.name} fill={colors[index]} />
-                  ))}
-                </Pie>
+                ></Pie>
 
-                <Tooltip content={CustomTooltip} />
+                <Tooltip content={CustomTooltip} animationDuration={10} />
               </PieChart>
             </ResponsiveContainer>
           </div>
