@@ -14,11 +14,14 @@ import {
 } from "recharts";
 import { useState } from "react";
 import Button from "../../../../../common/Button";
+import { useFilter } from "../../../../../store/useFilter";
 
 const SalesGraph = () => {
+  const country = useFilter((s) => s.country);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["sales-chart"],
-    queryFn: fetchSalesGraphData,
+    queryKey: ["sales-chart", country],
+    queryFn: () => fetchSalesGraphData(country),
   });
 
   const [range, setRange] = useState<"6M" | "1Y">("6M");
