@@ -13,7 +13,7 @@ import { fetchCountryTraffic } from "../../../../../api/country-traffic";
 const CountryTrafficBarChart = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["country-traffic"],
-    queryFn: fetchCountryTraffic,
+    queryFn: () => fetchCountryTraffic(),
   });
 
   const CustomTooltip = ({ active, payload }: TooltipContentProps) => {
@@ -23,7 +23,7 @@ const CountryTrafficBarChart = () => {
 
     return (
       <div className="rounded-lg border bg-white px-3 py-2 shadow-sm text-sm">
-        <p className="font-medium">{data.country}</p>
+        <p className="font-medium">{data.countryName}</p>
         <p>{data.users} users</p>
       </div>
     );

@@ -6,13 +6,16 @@ import {
   Tooltip,
   type TooltipContentProps,
 } from "recharts";
-import { fetchTrafficSources } from "../../../../../api/traffic-source";
+import { fetchBrowserTraffic } from "../../../../../api/browser-traffic";
 import { colors } from "./colors";
+import { useFilter } from "../../../../../store/useFilter";
 
 const BrowserTrafficPieChart = () => {
+  const country = useFilter((s) => s.country);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["traffic-sources"],
-    queryFn: fetchTrafficSources,
+    queryKey: ["browser-traffic", country],
+    queryFn: () => fetchBrowserTraffic(country),
   });
 
   const CustomTooltip = ({ active, payload }: TooltipContentProps) => {

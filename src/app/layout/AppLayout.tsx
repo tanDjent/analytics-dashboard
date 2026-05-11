@@ -1,11 +1,24 @@
 import HeaderActions from "./HeaderActions/HeaderActions";
-import { useSidebar } from "./hooks/useSidebar";
+import { useSidebar, type Tabs } from "./hooks/useSidebar";
 import Sidebar from "./Sidebar/Sidebar";
 import Topbar from "./Topbar/Topbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const AppLayout = () => {
-  const { isOpen, selectedTab } = useSidebar();
+  const { isOpen } = useSidebar();
+
+  const location = useLocation();
+
+  const titleMap: Record<string, Tabs> = {
+    "/": "Dashboard",
+    "/customers": "Customers",
+    "/orders": "Orders",
+    "/products": "Products",
+    "/team": "Team",
+    "/settings": "Settings",
+  };
+
+  const selectedTab = titleMap[location.pathname] ?? "Dashboard";
 
   return (
     <div className="flex">

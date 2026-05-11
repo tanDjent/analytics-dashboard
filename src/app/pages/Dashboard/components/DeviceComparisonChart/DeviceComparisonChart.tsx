@@ -11,11 +11,14 @@ import {
   type TooltipContentProps,
 } from "recharts";
 import { useState } from "react";
+import { useFilter } from "../../../../../store/useFilter";
 
 const DeviceComparisonChart = () => {
+  const country = useFilter((s) => s.country);
+
   const { data, isLoading } = useQuery({
-    queryKey: ["visitors-chart"],
-    queryFn: fetchVisitorsData,
+    queryKey: ["visitors-chart", country],
+    queryFn: () => fetchVisitorsData(country),
   });
 
   const [activeSeries, setActiveSeries] = useState<

@@ -23,7 +23,6 @@ const SalesGraph = () => {
     queryKey: ["sales-chart", country],
     queryFn: () => fetchSalesGraphData(country),
   });
-
   const [range, setRange] = useState<"6M" | "1Y">("6M");
 
   const CustomYAxisTickValue = (props: YAxisTickContentProps) => {

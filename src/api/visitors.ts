@@ -1,3 +1,5 @@
+import { getDataURL } from "./utility/utility";
+
 export type VisitorsData = {
   device: string;
   current: number;
@@ -6,32 +8,20 @@ export type VisitorsData = {
   share: number;
 };
 
-export const fetchVisitorsData = (): Promise<VisitorsData[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          device: "Desktop",
-          current: 1200,
-          previous: 1000,
-          change: 20,
-          share: 35,
-        },
-        {
-          device: "Mobile",
-          current: 1800,
-          previous: 1500,
-          change: 20,
-          share: 53,
-        },
-        {
-          device: "Tablet",
-          current: 400,
-          previous: 500,
-          change: -20,
-          share: 12,
-        },
-      ]);
-    }, 800);
-  });
+export const fetchVisitorsData = async (
+  country?: string | null,
+): Promise<VisitorsData[]> => {
+  try {
+    const url = getDataURL("/visitors", country);
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch sales data");
+    }
+    return (await response.json()) as VisitorsData[];
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };

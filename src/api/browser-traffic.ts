@@ -1,23 +1,22 @@
 import { getDataURL } from "./utility/utility";
 
-type SalesData = {
-  month: string;
-  revenue: number;
-  orders: number;
+type BrowserTraffic = {
+  name: string;
+  value: number;
 };
 
-export const fetchSalesGraphData = async (
+export const fetchBrowserTraffic = async (
   country?: string | null,
-): Promise<SalesData[]> => {
+): Promise<BrowserTraffic[]> => {
   try {
-    const url = getDataURL("/sales", country);
+    const url = getDataURL("/browser-traffic", country);
 
     const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error("Failed to fetch sales data");
     }
-    return (await response.json()) as SalesData[];
+    return (await response.json()) as BrowserTraffic[];
   } catch (error) {
     console.error(error);
     throw error;

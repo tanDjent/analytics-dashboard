@@ -6,47 +6,59 @@ import {
   Package,
   type LucideProps,
 } from "lucide-react";
+import { getDataURL } from "./utility/utility";
 
 export type Kpi = {
   title: string;
-  value: string;
-  change: string;
+  value: number;
+  change: number;
   isPositive: boolean;
   icon: React.ComponentType<LucideProps>;
 };
-export const fetchKpis = (): Promise<Kpi[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          title: "Orders",
-          value: "1,248",
-          change: "+8.2%",
-          isPositive: true,
-          icon: ShoppingCart,
-        },
-        {
-          title: "Revenue",
-          value: "$24,500",
-          change: "+12.5%",
-          isPositive: true,
-          icon: DollarSign,
-        },
-        {
-          title: "Customers",
-          value: "842",
-          change: "+5.1%",
-          isPositive: true,
-          icon: Users,
-        },
-        {
-          title: "Products",
-          value: "128",
-          change: "-2.3%",
-          isPositive: false,
-          icon: Package,
-        },
-      ]);
-    }, 800);
-  });
+
+const Icon = {
+  orders: ShoppingCart,
+  revenue: DollarSign,
+  customers: Users,
+  products: Package,
+};
+
+type MetricKey = "orders" | "revenue" | "customers" | "products";
+
+type Metric = {
+  value: number;
+  change: number;
+};
+
+type SummaryResponse = Record<MetricKey, Metric>;
+
+export const fetchKpis = async (country?: string | null): Promise<Kpi[]> => {
+  try {
+    const summaryData: Kpi[] = [];
+
+    const url = getDataURL("/summary", country);
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch sales data");
+    }
+    const data = (await response.json()) as SummaryResponse;
+
+    Object.keys(data).forEach((dataKey) => {
+      const item = data[dataKey as MetricKey];
+      summaryData.push({
+        title: dataKey,
+        value: item.value,
+        change: item.change,
+        isPositive: item.change >= 0,
+        icon: Icon[dataKey as MetricKey],
+      });
+    });
+
+    return summaryData;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };

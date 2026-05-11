@@ -1,18 +1,34 @@
+import { getDataURL } from "./utility/utility";
+
 type CountryTraffic = {
   country: string;
+  countryName: string;
   users: number;
 };
 
-export const fetchCountryTraffic = (): Promise<CountryTraffic[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        { country: "USA", users: 1200 },
-        { country: "India", users: 980 },
-        { country: "UK", users: 720 },
-        { country: "Germany", users: 540 },
-        { country: "Canada", users: 430 },
-      ]);
-    }, 800);
-  });
+type CountryTrafficAPIResponse = {
+  country: string;
+  country_name: string;
+  users: number;
+};
+
+export const fetchCountryTraffic = async (): Promise<CountryTraffic[]> => {
+  try {
+    const url = getDataURL("/country-traffic");
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Failed to fetch country traffic");
+    }
+    const data = (await response.json()) as CountryTrafficAPIResponse[];
+    return data.map(
+      ({ country, country_name, users }: CountryTrafficAPIResponse) => ({
+        country,
+        countryName: country_name,
+        users,
+      }),
+    );
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
