@@ -12,7 +12,7 @@ export const fetchVisitorsData = async (
   country?: string | null,
 ): Promise<VisitorsData[]> => {
   try {
-    const url = getDataURL("/visitors", country);
+    const url = getDataURL("/visitors", country).toString();
 
     const response = await fetch(url);
 

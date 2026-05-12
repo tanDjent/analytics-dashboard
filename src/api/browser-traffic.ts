@@ -9,7 +9,7 @@ export const fetchBrowserTraffic = async (
   country?: string | null,
 ): Promise<BrowserTraffic[]> => {
   try {
-    const url = getDataURL("/browser-traffic", country);
+    const url = getDataURL("/browser-traffic", country).toString();
 
     const response = await fetch(url);
 

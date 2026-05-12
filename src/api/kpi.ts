@@ -36,7 +36,7 @@ export const fetchKpis = async (country?: string | null): Promise<Kpi[]> => {
   try {
     const summaryData: Kpi[] = [];
 
-    const url = getDataURL("/summary", country);
+    const url = getDataURL("/summary", country).toString();
 
     const response = await fetch(url);
 

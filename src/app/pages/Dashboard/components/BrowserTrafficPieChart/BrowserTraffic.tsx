@@ -16,6 +16,11 @@ const BrowserTrafficPieChart = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["browser-traffic", country],
     queryFn: () => fetchBrowserTraffic(country),
+    select: (rawData) =>
+      rawData.map((item, index) => ({
+        ...item,
+        fill: colors[index],
+      })),
   });
 
   const CustomTooltip = ({ active, payload }: TooltipContentProps) => {
@@ -31,10 +36,6 @@ const BrowserTrafficPieChart = () => {
     );
   };
 
-  const coloredData = data?.map((item, index) => ({
-    ...item,
-    fill: colors[index],
-  }));
   return (
     <div className="rounded-lg bg-white p-4">
       <div className="mb-4 text-base font-medium text-gray-700">
@@ -50,7 +51,7 @@ const BrowserTrafficPieChart = () => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={coloredData}
+                  data={data}
                   dataKey="value"
                   nameKey="name"
                   innerRadius={70}
@@ -58,7 +59,7 @@ const BrowserTrafficPieChart = () => {
                   paddingAngle={2}
                 ></Pie>
 
-                <Tooltip content={CustomTooltip} animationDuration={10} />
+                <Tooltip content={CustomTooltip} animationDuration={0} />
               </PieChart>
             </ResponsiveContainer>
           </div>

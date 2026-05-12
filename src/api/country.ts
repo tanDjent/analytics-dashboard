@@ -7,7 +7,7 @@ export type Country = {
 
 export const fetchCountries = async (): Promise<Country[]> => {
   try {
-    const url = getDataURL("/country");
+    const url = getDataURL("/country").toString();
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Failed to fetch countries");

@@ -14,7 +14,7 @@ type CountryTrafficAPIResponse = {
 
 export const fetchCountryTraffic = async (): Promise<CountryTraffic[]> => {
   try {
-    const url = getDataURL("/country-traffic");
+    const url = getDataURL("/country-traffic").toString();
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Failed to fetch country traffic");

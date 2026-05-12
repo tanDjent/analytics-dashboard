@@ -10,7 +10,7 @@ export const fetchSalesGraphData = async (
   country?: string | null,
 ): Promise<SalesData[]> => {
   try {
-    const url = getDataURL("/sales", country);
+    const url = getDataURL("/sales", country).toString();
 
     const response = await fetch(url);
 
