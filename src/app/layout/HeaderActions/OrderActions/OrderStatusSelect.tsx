@@ -1,28 +1,17 @@
 import * as Select from "@radix-ui/react-select";
-
-import { useQuery } from "@tanstack/react-query";
-import { fetchCountries } from "../../../api/country";
 import { ChevronDown, Check } from "lucide-react";
-import { useFilter } from "../../../store/useFilter";
+import { useFilter } from "../../../../store/useFilter";
 
-const CountrySelect = () => {
-  const { country, setCountry } = useFilter();
+const OrderStatusSelect = () => {
+  const { orderStatus, setOrderStatus } = useFilter();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["countries"],
-    queryFn: fetchCountries,
-  });
+  const statuses = ["All", "Completed", "Pending", "Cancelled"]
 
-  if (isLoading) {
-    return (
-      <div className="h-9 w-[180px] rounded-md bg-gray-100 animate-pulse" />
-    );
-  }
 
   return (
     <Select.Root
-      value={country ?? "ALL"}
-      onValueChange={(value) => setCountry(value === "ALL" ? null : value)}
+      value={orderStatus ?? "All"}
+      onValueChange={(value) => setOrderStatus(value === "All" ? null : value)}
     >
       <Select.Trigger className="inline-flex items-center justify-between rounded-md border px-3 py-2 text-sm w-full lg:w-[180px] bg-white shadow-sm">
         <Select.Value />
@@ -37,13 +26,13 @@ const CountrySelect = () => {
           position="popper"
         >
           <Select.Viewport className="p-1">
-            {data?.map((item) => (
+            {statuses?.map((status) => (
               <Select.Item
-                key={item.code}
-                value={item.code}
+                key={status}
+                value={status}
                 className="relative flex cursor-pointer select-none items-center rounded px-2 py-1.5 text-sm outline-none hover:bg-gray-100"
               >
-                <Select.ItemText>{item.name}</Select.ItemText>
+                <Select.ItemText>{`Status: ${status}`}</Select.ItemText>
 
                 <Select.ItemIndicator className="absolute right-2">
                   <Check />
@@ -57,4 +46,4 @@ const CountrySelect = () => {
   );
 };
 
-export default CountrySelect;
+export default OrderStatusSelect;

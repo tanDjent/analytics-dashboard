@@ -1,6 +1,6 @@
 import { getDataURL } from "./utility/utility";
 
-type OrderStatus = "Completed" | "Pending" | "Cancelled";
+export type OrderStatus = "Completed" | "Pending" | "Cancelled";
 
 export type Order = {
   id: string;

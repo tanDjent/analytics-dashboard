@@ -1,8 +1,9 @@
-import { useSidebar } from "../hooks/useSidebar";
-import CountrySelect from "./CountrySelect";
+import { useSelectedTab } from "../hooks/useSidebar";
+import CountrySelect from "./common/CountrySelect";
+import OrderActions from "./OrderActions/OrderActions";
 
 const HeaderActions = () => {
-  const { selectedTab } = useSidebar();
+  const selectedTab = useSelectedTab();
 
   switch (selectedTab) {
     case "Dashboard":
@@ -11,6 +12,8 @@ const HeaderActions = () => {
           <CountrySelect />
         </div>
       );
+    case "Orders":
+      return <OrderActions />;
     default:
       return <></>;
   }

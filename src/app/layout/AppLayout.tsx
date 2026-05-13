@@ -27,7 +27,7 @@ const AppLayout = () => {
 
       {/* Main content */}
       <div
-        className={`flex-1 ${isOpen ? "ml-20 lg:ml-64" : "ml-20"} min-h-screen bg-white transition-all duration-300 ease-in-out`}
+        className={`flex-1 min-w-0 ${isOpen ? "ml-20 lg:ml-64" : "ml-20"} min-h-screen bg-white transition-all duration-300 ease-in-out`}
       >
         <Topbar />
 

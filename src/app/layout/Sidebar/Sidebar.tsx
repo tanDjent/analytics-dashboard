@@ -10,8 +10,7 @@ import Analytix from "../../../assets/analytixLogo.svg?react";
 
 const Sidebar = () => {
   const { navItems } = useLayout();
-  const { isOpen, toggle, setSelectedTab, close, selectedTab, open } =
-    useSidebar();
+  const { isOpen, toggle, close, open } = useSidebar();
   const SideBarIcon = isOpen ? ArrowLeftFromLine : ArrowRightFromLine;
 
   useEffect(() => {
@@ -103,11 +102,11 @@ const Sidebar = () => {
                 key={item.name}
                 to={item.path}
                 title={item.name}
-                className={`flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer ${selectedTab === item.name && "bg-gray-100"}`}
-                onClick={() => {
-                  setSelectedTab(item.name);
-                  closeOnSmallScreen();
-                }}
+                end={item.path === "/"}
+                className={({ isActive }) =>
+                  `flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer ${isActive ? "bg-gray-100" : ""}`
+                }
+                onClick={closeOnSmallScreen}
               >
                 <Icon className="size-5" />
                 {isOpen && (

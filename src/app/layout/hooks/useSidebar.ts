@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { create } from "zustand";
 
 export type Tabs =
@@ -13,8 +14,15 @@ type SidebarState = {
   toggle: () => void;
   open: () => void;
   close: () => void;
-  selectedTab: Tabs;
-  setSelectedTab: (tab: Tabs) => void;
+};
+
+const titleMap: Record<string, Tabs> = {
+  "/": "Dashboard",
+  "/customers": "Customers",
+  "/orders": "Orders",
+  "/products": "Products",
+  "/team": "Team",
+  "/settings": "Settings",
 };
 
 export const useSidebar = create<SidebarState>((set) => ({
@@ -25,8 +33,9 @@ export const useSidebar = create<SidebarState>((set) => ({
   open: () => set({ isOpen: true }),
 
   close: () => set({ isOpen: false }),
-
-  selectedTab: "Dashboard",
-
-  setSelectedTab: (tab: Tabs) => set({ selectedTab: tab }),
 }));
+
+export const useSelectedTab = (): Tabs => {
+  const { pathname } = useLocation();
+  return titleMap[pathname] ?? "Dashboard";
+};

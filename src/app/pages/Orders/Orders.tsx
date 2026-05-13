@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   createColumnHelper,
@@ -7,24 +7,33 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { fetchOrdersListData, type Order } from "../../../api/orders-list";
+import { fetchOrdersListData, type Order, type OrderStatus } from "../../../api/orders-list";
 import { useFilter } from "../../../store/useFilter";
+import { useSearchParams } from "react-router-dom";
 
 const columnHelper = createColumnHelper<Order>();
 
 const Orders = () => {
   const country = useFilter((s) => s.country);
+  const orderStatus = useFilter((s) => s.orderStatus);
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") ?? "";
 
-  const [filters] = useState({
-    page: 1,
-    limit: 20,
-  });
+
+  const filters = useMemo(()=>{
+    return {
+      page: Number(searchParams.get("page")) || 1,
+      limit: 20,
+      search: search,
+    }
+  },[searchParams,search]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["orders", country, filters],
+    queryKey: ["orders", country, orderStatus,filters],
     queryFn: () =>
       fetchOrdersListData({
         country,
+        status: orderStatus as OrderStatus,
         ...filters,
       }),
   });
@@ -35,8 +44,13 @@ const Orders = () => {
         header: "Order ID",
       }),
 
-      columnHelper.accessor("customer_email", {
+      columnHelper.accessor("customer_name", {
         header: "Customer",
+      }),
+
+
+      columnHelper.accessor("customer_email", {
+        header: "Customer Email",
       }),
 
       columnHelper.accessor("product", {
@@ -67,6 +81,7 @@ const Orders = () => {
     [],
   );
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: data?.data ?? [],
     columns,
@@ -74,7 +89,7 @@ const Orders = () => {
   });
 
   return (
-    <div className="rounded-lg border border-gray-300 bg-white p-4">
+    <div className="rounded-lg border border-gray-300 bg-white p-4 h-full">
       {isLoading ? (
         <div className="h-[400px] animate-pulse rounded-md bg-gray-100" />
       ) : (
