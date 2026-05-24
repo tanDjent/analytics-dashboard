@@ -28,7 +28,7 @@ const Orders = () => {
   const filters = useMemo(() => {
     return {
       page,
-      limit: 20,
+      limit: 15,
       search,
       country,
       status,
