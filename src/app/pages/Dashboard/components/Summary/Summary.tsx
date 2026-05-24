@@ -1,11 +1,12 @@
 import { fetchKpis } from "../../../../../api/kpi";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 import KpiCard from "./components/KpiCard/KpiCard";
 import KpiCardSkeleton from "./components/KpiCardSkeleton/KpiCardSkeleton";
-import { useFilter } from "../../../../../store/useFilter";
 
 const Summary = () => {
-  const country = useFilter((s) => s.country);
+  const [searchParams] = useSearchParams();
+  const country = searchParams.get("country");
 
   const { data, isLoading } = useQuery({
     queryKey: ["kpis", country],

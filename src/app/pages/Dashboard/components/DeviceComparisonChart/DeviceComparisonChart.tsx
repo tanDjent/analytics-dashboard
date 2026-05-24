@@ -11,10 +11,11 @@ import {
   type TooltipContentProps,
 } from "recharts";
 import { useState } from "react";
-import { useFilter } from "../../../../../store/useFilter";
+import { useSearchParams } from "react-router-dom";
 
 const DeviceComparisonChart = () => {
-  const country = useFilter((s) => s.country);
+  const [searchParams] = useSearchParams();
+  const country = searchParams.get("country");
 
   const { data, isLoading } = useQuery({
     queryKey: ["visitors-chart", country],

@@ -13,11 +13,12 @@ import {
   type YAxisTickContentProps,
 } from "recharts";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Button from "../../../../../common/Button";
-import { useFilter } from "../../../../../store/useFilter";
 
 const SalesGraph = () => {
-  const country = useFilter((s) => s.country);
+  const [searchParams] = useSearchParams();
+  const country = searchParams.get("country");
 
   const { data, isLoading } = useQuery({
     queryKey: ["sales-chart", country],

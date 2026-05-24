@@ -9,11 +9,14 @@ type FilterState = {
   clearOrderStatus: () => void;
 };
 
-export const useFilter = create<FilterState>((set) => ({
-  country: null,
-  orderStatus: null,
+
+export const useFilter = create<FilterState>((set) => {
+  const searchParams = new URLSearchParams(window.location.search);
+  return ({
+  country: searchParams.get("country") || null,
+  orderStatus: searchParams.get("status") || null,
   setCountry: (country) => set({ country }),
   setOrderStatus: (orderStatus) => set({ orderStatus }),
   clearCountry: () => set({ country: null }),
   clearOrderStatus: () => set({ orderStatus: null }),
-}));
+})});

@@ -7,76 +7,52 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { fetchOrdersListData, type Order, type OrderStatus } from "../../../api/orders-list";
-import { useFilter } from "../../../store/useFilter";
+import {
+  fetchOrdersListData,
+  type Order,
+  type OrderStatus,
+} from "../../../api/orders-list";
 import { useSearchParams } from "react-router-dom";
 
 const columnHelper = createColumnHelper<Order>();
 
 const Orders = () => {
-  const country = useFilter((s) => s.country);
-  const orderStatus = useFilter((s) => s.orderStatus);
   const [searchParams] = useSearchParams();
+
+  const page = Number(searchParams.get("page")) || 1;
   const search = searchParams.get("search") ?? "";
+  const country = searchParams.get("country") ?? "";
+  const status = (searchParams.get("status") as OrderStatus) ?? "";
 
-
-  const filters = useMemo(()=>{
+  const filters = useMemo(() => {
     return {
-      page: Number(searchParams.get("page")) || 1,
+      page,
       limit: 20,
-      search: search,
-    }
-  },[searchParams,search]);
+      search,
+      country,
+      status,
+    };
+  }, [page, search, country, status]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["orders", country, orderStatus,filters],
-    queryFn: () =>
-      fetchOrdersListData({
-        country,
-        status: orderStatus as OrderStatus,
-        ...filters,
-      }),
+    queryKey: ["orders", filters],
+    queryFn: () => fetchOrdersListData({ ...filters }),
   });
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor("id", {
-        header: "Order ID",
-      }),
-
-      columnHelper.accessor("customer_name", {
-        header: "Customer",
-      }),
-
-
-      columnHelper.accessor("customer_email", {
-        header: "Customer Email",
-      }),
-
-      columnHelper.accessor("product", {
-        header: "Product",
-      }),
-
-      columnHelper.accessor("country", {
-        header: "Country",
-      }),
-
-      columnHelper.accessor("quantity", {
-        header: "Qty",
-      }),
-
+      columnHelper.accessor("id", { header: "Order ID" }),
+      columnHelper.accessor("customer_name", { header: "Customer" }),
+      columnHelper.accessor("customer_email", { header: "Customer Email" }),
+      columnHelper.accessor("product", { header: "Product" }),
+      columnHelper.accessor("country", { header: "Country" }),
+      columnHelper.accessor("quantity", { header: "Qty" }),
       columnHelper.accessor("total", {
         header: "Total",
         cell: (info) => `$${info.getValue()}`,
       }),
-
-      columnHelper.accessor("status", {
-        header: "Status",
-      }),
-
-      columnHelper.accessor("date", {
-        header: "Date",
-      }),
+      columnHelper.accessor("status", { header: "Status" }),
+      columnHelper.accessor("date", { header: "Date" }),
     ],
     [],
   );
@@ -91,7 +67,7 @@ const Orders = () => {
   return (
     <div className="rounded-lg border border-gray-300 bg-white p-4 h-full">
       {isLoading ? (
-        <div className="h-[400px] animate-pulse rounded-md bg-gray-100" />
+        <div className="h-[1319px] animate-pulse rounded-md bg-gray-100" />
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse text-sm">

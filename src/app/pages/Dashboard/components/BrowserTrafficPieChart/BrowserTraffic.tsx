@@ -8,11 +8,11 @@ import {
 } from "recharts";
 import { fetchBrowserTraffic } from "../../../../../api/browser-traffic";
 import { colors } from "./colors";
-import { useFilter } from "../../../../../store/useFilter";
+import { useSearchParams } from "react-router-dom";
 
 const BrowserTrafficPieChart = () => {
-  const country = useFilter((s) => s.country);
-
+  const [searchParams] = useSearchParams();
+  const country = searchParams.get("country");
   const { data, isLoading } = useQuery({
     queryKey: ["browser-traffic", country],
     queryFn: () => fetchBrowserTraffic(country),
