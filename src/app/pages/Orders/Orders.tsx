@@ -12,12 +12,13 @@ import {
   type Order,
   type OrderStatus,
 } from "../../../api/orders-list";
+import Pagination from "../../../common/Pagination";
 import { useSearchParams } from "react-router-dom";
 
 const columnHelper = createColumnHelper<Order>();
 
 const Orders = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const page = Number(searchParams.get("page")) || 1;
   const search = searchParams.get("search") ?? "";
@@ -108,6 +109,23 @@ const Orders = () => {
             </tbody>
           </table>
         </div>
+      )}
+
+      {data && (
+        <Pagination
+          page={data.page}
+          limit={data.limit}
+          total={data.total}
+          totalPages={data.totalPages}
+          itemLabel="orders"
+          onPageChange={(nextPage) => {
+            setSearchParams((prev) => {
+              const params = new URLSearchParams(prev);
+              params.set("page", String(nextPage));
+              return params;
+            });
+          }}
+        />
       )}
     </div>
   );
