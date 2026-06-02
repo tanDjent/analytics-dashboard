@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   createColumnHelper,
@@ -20,25 +20,40 @@ import { ChevronsUpDown, MoveUp, MoveDown } from "lucide-react";
 
 const columnHelper = createColumnHelper<Order>();
 
+const PAGE_SIZE = 15;
+
+const SORTABLE_COLUMNS = new Set<string>([
+  "date",
+  "total",
+  "price",
+  "quantity",
+  "customer_name",
+  "customer_email",
+  "product",
+]);
+
+// Stable reference so react-table doesn't re-init while data is loading.
+const EMPTY_ORDERS: Order[] = [];
+
 const Orders = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = Number(searchParams.get("page")) || 1;
   const search = searchParams.get("search") ?? "";
   const country = searchParams.get("country") ?? "";
-  const status = (searchParams.get("status") as OrderStatus) ?? "";
-  const sortBy = (searchParams.get("sort_by") as SortableFields) ?? "";
-  const sortOrder = (searchParams.get("sort_order") as "asc" | "desc") ?? "";
+  const status = (searchParams.get("status") ?? "") as OrderStatus | "";
+  const sortBy = (searchParams.get("sort_by") ?? "") as SortableFields | "";
+  const sortOrder = (searchParams.get("sort_order") ?? "") as "asc" | "desc" | "";
 
   const filters = useMemo(() => {
     return {
       page,
-      limit: 15,
-      search,
-      country,
-      status,
-      sort_by: sortBy,
-      sort_order: sortOrder,
+      limit: PAGE_SIZE,
+      search: search || undefined,
+      country: country || undefined,
+      status: status || undefined,
+      sort_by: sortBy || undefined,
+      sort_order: sortOrder || undefined,
     };
   }, [page, search, country, status, sortBy, sortOrder]);
 
@@ -49,38 +64,42 @@ const Orders = () => {
 
   const SortIcon = sortOrder === "asc" ? MoveUp : MoveDown;
 
-  const handleSort = (field: string) => {
-    setSearchParams((prev) => {
-      const params = new URLSearchParams(prev);
+  const handleSort = useCallback(
+    (field: string) => {
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
 
-      const currentField = params.get("sort_by");
-      const currentOrder = params.get("sort_order");
+        const currentField = params.get("sort_by");
+        const currentOrder = params.get("sort_order");
 
-      if (currentField !== field) {
-        params.set("sort_by", field);
-        params.set("sort_order", "asc");
-      } else if (currentOrder === "asc") {
-        params.set("sort_order", "desc");
-      } else {
-        params.delete("sort_by");
-        params.delete("sort_order");
-      }
+        if (currentField !== field) {
+          params.set("sort_by", field);
+          params.set("sort_order", "asc");
+        } else if (currentOrder === "asc") {
+          params.set("sort_order", "desc");
+        } else {
+          params.delete("sort_by");
+          params.delete("sort_order");
+        }
 
-      params.set("page", "1");
+        params.set("page", "1");
 
-      return params;
-    });
-  };
+        return params;
+      });
+    },
+    [setSearchParams],
+  );
 
-  const SORTABLE_COLUMNS = [
-    "date",
-    "total",
-    "price",
-    "quantity",
-    "customer_name",
-    "customer_email",
-    "product",
-  ] as const;
+  const handlePageChange = useCallback(
+    (nextPage: number) => {
+      setSearchParams((prev) => {
+        const params = new URLSearchParams(prev);
+        params.set("page", String(nextPage));
+        return params;
+      });
+    },
+    [setSearchParams],
+  );
 
   const columns = useMemo(
     () => [
@@ -127,7 +146,7 @@ const Orders = () => {
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
-    data: data?.data ?? [],
+    data: data?.data ?? EMPTY_ORDERS,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -142,43 +161,39 @@ const Orders = () => {
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id} className="border-b border-gray-200">
-                  {headerGroup.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="px-4 py-3 text-left font-medium text-gray-600"
-                    >
-                      {SORTABLE_COLUMNS.includes(
-                        header.column.id as (typeof SORTABLE_COLUMNS)[number],
-                      ) ? (
-                        <button
-                          type="button"
-                          onClick={() => handleSort(header.column.id)}
-                          className="flex items-center gap-1"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                  {headerGroup.headers.map((header) => {
+                    const headerContent = flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    );
+                    const isSortable = SORTABLE_COLUMNS.has(header.column.id);
+                    const isActiveSort =
+                      sortBy === header.column.id && sortOrder.length > 0;
 
-                          {sortBy === header.column.id &&
-                            !!sortOrder.length && <SortIcon size={14} />}
-
-                          {SORTABLE_COLUMNS.includes(
-                            header.column
-                              .id as (typeof SORTABLE_COLUMNS)[number],
-                          ) &&
-                            sortBy !== header.column.id && (
+                    return (
+                      <th
+                        key={header.id}
+                        className="px-4 py-3 text-left font-medium text-gray-600"
+                      >
+                        {isSortable ? (
+                          <button
+                            type="button"
+                            onClick={() => handleSort(header.column.id)}
+                            className="flex items-center gap-1"
+                          >
+                            {headerContent}
+                            {isActiveSort ? (
+                              <SortIcon size={14} />
+                            ) : (
                               <ChevronsUpDown size={14} />
                             )}
-                        </button>
-                      ) : (
-                        flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )
-                      )}
-                    </th>
-                  ))}
+                          </button>
+                        ) : (
+                          headerContent
+                        )}
+                      </th>
+                    );
+                  })}
                 </tr>
               ))}
             </thead>
@@ -211,13 +226,7 @@ const Orders = () => {
           total={data.total}
           totalPages={data.totalPages}
           itemLabel="orders"
-          onPageChange={(nextPage) => {
-            setSearchParams((prev) => {
-              const params = new URLSearchParams(prev);
-              params.set("page", String(nextPage));
-              return params;
-            });
-          }}
+          onPageChange={handlePageChange}
         />
       )}
     </div>
