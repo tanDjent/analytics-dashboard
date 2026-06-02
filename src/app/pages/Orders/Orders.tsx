@@ -11,9 +11,12 @@ import {
   fetchOrdersListData,
   type Order,
   type OrderStatus,
+  type SortableFields,
 } from "../../../api/orders-list";
 import Pagination from "../../../common/Pagination";
 import { useSearchParams } from "react-router-dom";
+
+import { ChevronsUpDown, MoveUp, MoveDown } from "lucide-react";
 
 const columnHelper = createColumnHelper<Order>();
 
@@ -24,6 +27,8 @@ const Orders = () => {
   const search = searchParams.get("search") ?? "";
   const country = searchParams.get("country") ?? "";
   const status = (searchParams.get("status") as OrderStatus) ?? "";
+  const sortBy = (searchParams.get("sort_by") as SortableFields) ?? "";
+  const sortOrder = (searchParams.get("sort_order") as "asc" | "desc") ?? "";
 
   const filters = useMemo(() => {
     return {
@@ -32,28 +37,90 @@ const Orders = () => {
       search,
       country,
       status,
+      sort_by: sortBy,
+      sort_order: sortOrder,
     };
-  }, [page, search, country, status]);
+  }, [page, search, country, status, sortBy, sortOrder]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["orders", filters],
     queryFn: () => fetchOrdersListData({ ...filters }),
   });
 
+  const SortIcon = sortOrder === "asc" ? MoveUp : MoveDown;
+
+  const handleSort = (field: string) => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+
+      const currentField = params.get("sort_by");
+      const currentOrder = params.get("sort_order");
+
+      if (currentField !== field) {
+        params.set("sort_by", field);
+        params.set("sort_order", "asc");
+      } else if (currentOrder === "asc") {
+        params.set("sort_order", "desc");
+      } else {
+        params.delete("sort_by");
+        params.delete("sort_order");
+      }
+
+      params.set("page", "1");
+
+      return params;
+    });
+  };
+
+  const SORTABLE_COLUMNS = [
+    "date",
+    "total",
+    "price",
+    "quantity",
+    "customer_name",
+    "customer_email",
+    "product",
+  ] as const;
+
   const columns = useMemo(
     () => [
-      columnHelper.accessor("id", { header: "Order ID" }),
-      columnHelper.accessor("customer_name", { header: "Customer" }),
-      columnHelper.accessor("customer_email", { header: "Customer Email" }),
-      columnHelper.accessor("product", { header: "Product" }),
-      columnHelper.accessor("country", { header: "Country" }),
-      columnHelper.accessor("quantity", { header: "Qty" }),
+      columnHelper.accessor("id", {
+        id: "order_id",
+        header: "Order ID",
+      }),
+      columnHelper.accessor("customer_name", {
+        id: "customer_name",
+        header: "Customer",
+      }),
+      columnHelper.accessor("customer_email", {
+        id: "customer_email",
+        header: "Customer Email",
+      }),
+      columnHelper.accessor("product", {
+        id: "product",
+        header: "Product",
+      }),
+      columnHelper.accessor("country", {
+        id: "country",
+        header: "Country",
+      }),
+      columnHelper.accessor("quantity", {
+        id: "quantity",
+        header: "Qty",
+      }),
       columnHelper.accessor("total", {
+        id: "total",
         header: "Total",
         cell: (info) => `$${info.getValue()}`,
       }),
-      columnHelper.accessor("status", { header: "Status" }),
-      columnHelper.accessor("date", { header: "Date" }),
+      columnHelper.accessor("status", {
+        id: "status",
+        header: "Status",
+      }),
+      columnHelper.accessor("date", {
+        id: "date",
+        header: "Date",
+      }),
     ],
     [],
   );
@@ -80,9 +147,35 @@ const Orders = () => {
                       key={header.id}
                       className="px-4 py-3 text-left font-medium text-gray-600"
                     >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
+                      {SORTABLE_COLUMNS.includes(
+                        header.column.id as (typeof SORTABLE_COLUMNS)[number],
+                      ) ? (
+                        <button
+                          type="button"
+                          onClick={() => handleSort(header.column.id)}
+                          className="flex items-center gap-1"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+
+                          {sortBy === header.column.id &&
+                            !!sortOrder.length && <SortIcon size={14} />}
+
+                          {SORTABLE_COLUMNS.includes(
+                            header.column
+                              .id as (typeof SORTABLE_COLUMNS)[number],
+                          ) &&
+                            sortBy !== header.column.id && (
+                              <ChevronsUpDown size={14} />
+                            )}
+                        </button>
+                      ) : (
+                        flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )
                       )}
                     </th>
                   ))}

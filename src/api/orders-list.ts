@@ -23,6 +23,14 @@ export type OrdersResponse = {
   limit: number;
   totalPages: number;
 };
+export type SortableFields =
+  | "date"
+  | "total"
+  | "price"
+  | "quantity"
+  | "customer_name"
+  | "customer_email"
+  | "product";
 
 type FetchOrdersParams = {
   page?: number | null;
@@ -30,8 +38,8 @@ type FetchOrdersParams = {
   country?: string | null;
   status?: OrderStatus;
   search?: string | null;
-  sort_by?: "date" | "total" | "price" | "quantity";
-  order?: "asc" | "desc";
+  sort_by?: SortableFields;
+  sort_order?: "asc" | "desc";
 };
 
 export const fetchOrdersListData = async ({
@@ -41,7 +49,7 @@ export const fetchOrdersListData = async ({
   status,
   search,
   sort_by = "date",
-  order = "desc",
+  sort_order = "desc",
 }: Partial<FetchOrdersParams>): Promise<OrdersResponse> => {
   try {
     const url = getDataURL("/orders");
@@ -65,8 +73,8 @@ export const fetchOrdersListData = async ({
       url.searchParams.append("sort_by", sort_by);
     }
 
-    if (order) {
-      url.searchParams.append("order", order);
+    if (sort_order) {
+      url.searchParams.append("order", sort_order);
     }
 
     const response = await fetch(url.toString());

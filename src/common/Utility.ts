@@ -4,7 +4,7 @@ export const capitalize = (value: string): string => {
 
 export const debounce = <Args extends unknown[]>(
   callback: (...args: Args) => void,
-  delay = 500
+  delay = 500,
 ) => {
   let timer: ReturnType<typeof setTimeout>;
 
