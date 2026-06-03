@@ -1,4 +1,5 @@
 import "./Topbar-style.scss";
+import tanmayDisplayPicture from "../../../assets/tanmayDisplayPicture.jpg";
 
 const Topbar = () => {
   return (
@@ -7,7 +8,7 @@ const Topbar = () => {
         <span className="font-medium hidden md:flex">Welcome, Tanmay</span>
         <img
           className="w-8 h-8 rounded-full bg-gray-300"
-          src="/src/assets/tanmayDisplayPicture.jpg"
+          src={tanmayDisplayPicture}
         />
       </div>
     </header>
