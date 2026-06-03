@@ -1,15 +1,13 @@
 import CountrySelect from "../common/CountrySelect";
 import SearchAction from "../common/SearchAction";
-import OrderStatusSelect from "./OrderStatusSelect";
 
-const OrderActions = () => {
+const CustomerActions = () => {
   return (
     <div className="flex flex-col gap-3 lg:flex-row">
-      <SearchAction placeholder="Search Orders" />
-      <OrderStatusSelect />
+      <SearchAction placeholder="Search Customer" />
       <CountrySelect />
     </div>
   );
 };
 
-export default OrderActions;
+export default CustomerActions;

@@ -3,8 +3,9 @@ import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { debounce } from "../../../../common/Utility";
 
+type SeachActionProp = { placeholder: string };
 
-const OrderSearch = () => {
+const SearchAction = ({ placeholder }: SeachActionProp) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const search = searchParams.get("search") ?? "";
@@ -26,7 +27,7 @@ const OrderSearch = () => {
           return params;
         });
       }, 500),
-    [setSearchParams]
+    [setSearchParams],
   );
 
   return (
@@ -39,7 +40,7 @@ const OrderSearch = () => {
       <input
         type="text"
         defaultValue={search}
-        placeholder="Search orders"
+        placeholder={placeholder}
         onChange={(e) => updateSearch(e.target.value)}
         className="w-full rounded-md border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm shadow-sm outline-none focus:border-indigo-500"
       />
@@ -47,4 +48,4 @@ const OrderSearch = () => {
   );
 };
 
-export default OrderSearch;
+export default SearchAction;
