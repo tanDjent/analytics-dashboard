@@ -1,5 +1,6 @@
+import { useSidebar } from "../../store/useSidebar";
 import HeaderActions from "./HeaderActions/HeaderActions";
-import { useSidebar, type Tabs } from "./hooks/useSidebar";
+import { type Tabs } from "./hooks/useSidebar";
 import Sidebar from "./Sidebar/Sidebar";
 import Topbar from "./Topbar/Topbar";
 import { Outlet, useLocation } from "react-router-dom";

@@ -1,12 +1,11 @@
 import { ArrowLeftFromLine, ArrowRightFromLine } from "lucide-react";
 import useLayout from "../hooks/useLayout";
-import { useSidebar } from "../hooks/useSidebar";
-
 import "./Sidebar-style.scss";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 
 import Analytix from "../../../assets/analytixLogo.svg?react";
+import { useSidebar } from "../../../store/useSidebar";
 
 const Sidebar = () => {
   const { navItems } = useLayout();
