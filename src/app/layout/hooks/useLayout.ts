@@ -1,7 +1,6 @@
 import {
   House,
   Package,
-  Settings,
   Shirt,
   UserRound,
   Users,
@@ -28,7 +27,6 @@ const useLayout = () => {
     { name: "Orders", icon: Package, path: "/orders" },
     { name: "Products", icon: Shirt, path: "/products" },
     { name: "Team", icon: Users, path: "/team" },
-    { name: "Settings", icon: Settings, path: "/settings" },
   ];
 
   return { navItems };

@@ -4,6 +4,7 @@ import { type Tabs } from "./hooks/useSidebar";
 import Sidebar from "./Sidebar/Sidebar";
 import Topbar from "./Topbar/Topbar";
 import { Outlet, useLocation } from "react-router-dom";
+import UserDetailsModal from "./UserDetailsModal/UserDetailsModal";
 
 const AppLayout = () => {
   const { isOpen } = useSidebar();
@@ -40,6 +41,7 @@ const AppLayout = () => {
             <HeaderActions />
           </div>
           <Outlet />
+          <UserDetailsModal open={false} />
         </main>
       </div>
     </div>
