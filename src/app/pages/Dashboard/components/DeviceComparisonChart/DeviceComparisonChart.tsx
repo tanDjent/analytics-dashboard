@@ -13,6 +13,8 @@ import {
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
+import "./DeviceComparisonChart.scss";
+
 const DeviceComparisonChart = () => {
   const [searchParams] = useSearchParams();
   const country = searchParams.get("country");
@@ -66,7 +68,7 @@ const DeviceComparisonChart = () => {
 
   return (
     <div className="flex flex-col justify-between rounded-lg bg-white p-4">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-4">
         <span className="text-base font-medium text-gray-700">
           Visitors: Device Comparison
         </span>
@@ -109,7 +111,7 @@ const DeviceComparisonChart = () => {
       {isLoading ? (
         <div className="h-[300px] animate-pulse bg-gray-100 rounded-md" />
       ) : (
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" className="device-comparison-chart">
           <RadarChart data={data} cx="50%" cy="60%">
             <PolarGrid stroke="#e5e7eb" strokeOpacity={0.8} />
             <PolarAngleAxis dataKey="device" tick={{ dy: 2 }} />

@@ -1,0 +1,9 @@
+.device-comparison-chart {
+  height: 300px !important;
+}
+
+@media (max-width: 640px) {
+  .device-comparison-chart {
+    height: 200px !important;
+  }
+}

@@ -1,22 +1,24 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { Globe, FileText, X } from "lucide-react";
+import { FileText, X } from "lucide-react";
 
+import tanmayDisplayPicture from "../../../assets/tanmayDisplayPicture.jpg";
 interface UserDetailsModalProps {
   open: boolean;
+  close: () => void;
 }
 
-const UserDetailsModal = ({ open }: UserDetailsModalProps) => {
+const UserDetailsModal = ({ open, close }: UserDetailsModalProps) => {
   return (
     <Dialog.Root open={open}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-[2px] animate-in fade-in duration-200" />
+        <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 animate-in fade-in duration-200" />
 
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-[420px] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-xl outline-none animate-in zoom-in-95 duration-200">
+        <Dialog.Content className="fixed left-1/2 top-1/2 w-[420px] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white z-50 p-6 shadow-xl outline-none animate-in zoom-in-95 duration-200">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
               <img
-                src="/profile.jpg"
+                src={tanmayDisplayPicture}
                 alt="Tanmay Verma"
                 className="h-16 w-16 rounded-full object-cover"
               />
@@ -26,26 +28,29 @@ const UserDetailsModal = ({ open }: UserDetailsModalProps) => {
                   Tanmay Verma
                 </Dialog.Title>
 
-                <p className="text-sm text-gray-500">Frontend Engineer</p>
+                <p className="text-sm text-gray-500">Software Engineer</p>
               </div>
             </div>
 
             <Dialog.Close asChild>
-              <button className="rounded-md p-2 text-gray-500 transition hover:bg-gray-100">
+              <button
+                className="rounded-md p-2 text-gray-500 transition hover:bg-gray-100"
+                onClick={close}
+              >
                 <X size={18} />
               </button>
             </Dialog.Close>
           </div>
 
           <Dialog.Description className="mt-5 text-sm leading-relaxed text-gray-600">
-            Frontend engineer specializing in React, TypeScript, and modern web
+            Software engineer specializing in React, TypeScript, and modern web
             applications. Passionate about building performant and intuitive
             user experiences.
           </Dialog.Description>
 
           <div className="mt-6 flex flex-col gap-3">
             <a
-              href="https://github.com/yourusername"
+              href="https://github.com/tanDjent"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-3 rounded-xl border border-gray-200 p-3 transition hover:bg-gray-50"
@@ -55,7 +60,7 @@ const UserDetailsModal = ({ open }: UserDetailsModalProps) => {
             </a>
 
             <a
-              href="https://linkedin.com/in/yourusername"
+              href="https://www.linkedin.com/in/vermatanmay/"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-3 rounded-xl border border-gray-200 p-3 transition hover:bg-gray-50"
@@ -64,7 +69,7 @@ const UserDetailsModal = ({ open }: UserDetailsModalProps) => {
               <span>LinkedIn</span>
             </a>
 
-            <a
+            {/* <a
               href="https://yourportfolio.com"
               target="_blank"
               rel="noreferrer"
@@ -72,10 +77,10 @@ const UserDetailsModal = ({ open }: UserDetailsModalProps) => {
             >
               <Globe size={18} />
               <span>Portfolio</span>
-            </a>
+            </a> */}
 
             <a
-              href="/Tanmay_Verma_Resume.pdf"
+              href="https://github.com/tanDjent/tanmay-resume/blob/main/Tanmay_Verma_Resume.pdf"
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-3 rounded-xl border border-gray-200 p-3 transition hover:bg-gray-50"
