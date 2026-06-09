@@ -79,14 +79,7 @@ const Sidebar = () => {
             }}
           >
             <Analytix className="size-8 m-3" />
-            {isOpen && (
-              <span className="font-semibold text-lg">
-                Analytix
-                <span className="font-semibold text-sm text-orange-300">
-                  (WIP)
-                </span>
-              </span>
-            )}
+            {isOpen && <span className="font-semibold text-lg">Analytix</span>}
           </div>
           {isOpen && (
             <div>

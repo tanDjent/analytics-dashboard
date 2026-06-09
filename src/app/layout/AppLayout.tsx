@@ -26,29 +26,27 @@ const AppLayout = () => {
   const [showUserModal, setShowUserModal] = useState(false);
 
   return (
-    <div className="flex">
-      {/* Sidebar */}
+    <div className="flex h-dvh">
       <Sidebar />
 
-      {/* Main content */}
       <div
-        className={`flex-1 min-w-0 ${isOpen ? "ml-20 lg:ml-64" : "ml-20"} min-h-dvh bg-white transition-all duration-300 ease-in-out`}
+        className={`flex flex-1 flex-col min-w-0 ${
+          isOpen ? "ml-20 lg:ml-64" : "ml-20"
+        } bg-white transition-all duration-300 ease-in-out`}
       >
         <Topbar showUserModal={() => setShowUserModal(true)} />
 
-        <main className="p-4 lg:p-6 rounded-lg bg-gray-50">
+        <main className="flex-1 overflow-auto p-4 lg:p-6 bg-gray-50">
           <div className="flex flex-col lg:flex-row mb-4 justify-between lg:items-center gap-3 lg:gap-0">
-            <div className="flex">
-              <h1 className="text-3xl font-medium">{selectedTab}</h1>
-            </div>
+            <h1 className="text-3xl font-medium">{selectedTab}</h1>
             <HeaderActions />
           </div>
+
           <Outlet />
+
           <UserDetailsModal
             open={showUserModal}
-            close={() => {
-              setShowUserModal(false);
-            }}
+            close={() => setShowUserModal(false)}
           />
         </main>
       </div>

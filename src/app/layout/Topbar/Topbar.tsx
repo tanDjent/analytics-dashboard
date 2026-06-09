@@ -1,5 +1,5 @@
 import "./Topbar-style.scss";
-import tanmayDisplayPicture from "../../../assets/tanmayDisplayPicture.jpg";
+import TanmayDisplayPicture from "../../../assets/TanmayDisplayPicture.jpg";
 type TopbarProps = {
   showUserModal: () => void;
 };
@@ -13,7 +13,7 @@ const Topbar = ({ showUserModal }: TopbarProps) => {
         <span className="font-medium hidden md:flex">Welcome, Tanmay</span>
         <img
           className="w-8 h-8 rounded-full bg-gray-300"
-          src={tanmayDisplayPicture}
+          src={TanmayDisplayPicture}
         />
       </div>
     </header>

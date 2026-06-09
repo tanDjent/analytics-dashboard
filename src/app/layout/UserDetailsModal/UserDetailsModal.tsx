@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FileText, X } from "lucide-react";
 
-import tanmayDisplayPicture from "../../../assets/tanmayDisplayPicture.jpg";
+import TanmayDisplayPicture from "../../../assets/TanmayDisplayPicture.jpg";
 interface UserDetailsModalProps {
   open: boolean;
   close: () => void;
@@ -18,7 +18,7 @@ const UserDetailsModal = ({ open, close }: UserDetailsModalProps) => {
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
               <img
-                src={tanmayDisplayPicture}
+                src={TanmayDisplayPicture}
                 alt="Tanmay Verma"
                 className="h-16 w-16 rounded-full object-cover"
               />

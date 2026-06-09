@@ -43,7 +43,10 @@ const Orders = () => {
   const country = searchParams.get("country") ?? "";
   const status = (searchParams.get("status") ?? "") as OrderStatus | "";
   const sortBy = (searchParams.get("sort_by") ?? "") as SortableFields | "";
-  const sortOrder = (searchParams.get("sort_order") ?? "") as "asc" | "desc" | "";
+  const sortOrder = (searchParams.get("sort_order") ?? "") as
+    | "asc"
+    | "desc"
+    | "";
 
   const filters = useMemo(() => {
     return {
@@ -152,7 +155,7 @@ const Orders = () => {
   });
 
   return (
-    <div className="rounded-lg border border-gray-300 bg-white p-4 h-full">
+    <div className="rounded-lg border border-gray-300 bg-white p-4">
       {isLoading ? (
         <div className="h-[1319px] animate-pulse rounded-md bg-gray-100" />
       ) : (
