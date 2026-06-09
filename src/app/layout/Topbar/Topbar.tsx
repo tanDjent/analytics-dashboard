@@ -1,5 +1,5 @@
 import "./Topbar-style.scss";
-import TanmayDisplayPicture from "../../../assets/TanmayDisplayPicture.jpg";
+import TanmayDisplayPicture from "../../../assets/TanmayLinkedin.jpeg";
 type TopbarProps = {
   showUserModal: () => void;
 };

@@ -2,7 +2,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { FileText, X } from "lucide-react";
 
-import TanmayDisplayPicture from "../../../assets/TanmayDisplayPicture.jpg";
+import TanmayDisplayPicture from "../../../assets/TanmayLinkedin.jpeg";
 interface UserDetailsModalProps {
   open: boolean;
   close: () => void;
