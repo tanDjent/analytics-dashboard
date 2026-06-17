@@ -3,6 +3,8 @@ import CountryTrafficBarChart from "./components/CountryTrafficBarChart/CountryT
 import DeviceComparisonChart from "./components/DeviceComparisonChart/DeviceComparisonChart";
 import SalesGraph from "./components/SalesGraph/SalesGraph";
 import Summary from "./components/Summary/Summary";
+import TopCustomers from "./components/TopCustomers/TopCustomers";
+import TopProducts from "./components/TopProducts/TopProducts";
 
 const Dashboard = () => {
   return (
@@ -13,6 +15,8 @@ const Dashboard = () => {
         <DeviceComparisonChart />
         <BrowserTrafficPieChart />
         <CountryTrafficBarChart />
+        <TopCustomers />
+        <TopProducts />
       </div>
     </div>
   );
